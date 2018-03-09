@@ -22,7 +22,7 @@ const TodoForm = ({addTodo}) => {
 const Todo = ({todo, remove}) => {
     // Each Todo
     return (
-        <li onClick={(remove(todo.id))}>
+        <li class="nav-link">
             {todo.text}
         </li>
     )
@@ -32,6 +32,7 @@ const TodoList = ({todos, remove}) => {
     const todoNode = todos.map((todo) => {
         return (<Todo todo={todo} key={todo.id} reomve={remove}/>)
     });
+    return (<ul>{todoNode}</ul>);
 };
 
 const Title = () => {
@@ -59,14 +60,27 @@ class App extends Component {
         this.state.data.push(todo);
         this.setState({data: this.state.data});
     }
+    handleRemove(id){
+        // Filter all todos except the one to be removed
+        const remainder = this.state.data.filter((todo) => {
+            if(todo.id !== id) return todo;
+        });
+        // Update state with filter
+        this.setState({data: remainder});
+    }
 
     render() {
         return (
             <div className="App">
                 <div class="container">
-                    <div id="container" class="col-md-8 col-md-offset-2">
+                    <Title/>
+                    <TodoForm addTodo={this.addTodo.bind(this)}/>
+                    <TodoList todos={this.state.data} />
+
+                    {/*<div id="container" class="col-md-8 col-md-offset-2">
                         <button class="btn btn-outline-danger">click me!</button>
-                    </div>
+                        <button class="btn btn-outline-danger">click me two!</button>
+                    </div>*/}
                 </div>
 
 
