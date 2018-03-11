@@ -11,7 +11,7 @@ const TodoForm = ({addTodo}) => {
     return (
         <div class="input-group mb-3">
             <input type="text" class="form-control" onKeyPress={(e) => {
-                if (e.key == 'Enter') {
+                if (e.key == 'Enter' && input.value != '') {
                     addTodo(input.value);
                     input.value = '';
                 }
