@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import moment from 'moment';
 
 console.clear();
 
@@ -9,7 +10,12 @@ const TodoForm = ({addTodo}) => {
     // Return JSX
     return (
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="" aria-label="" ref={node => {
+            <input type="text" class="form-control" onKeyPress={(e) => {
+                if (e.key == 'Enter') {
+                    addTodo(input.value);
+                    input.value = '';
+                }
+            }} placeholder="add task..." ref={node => {
                 input = node;
             }}/>
             <div class="input-group-append">
@@ -26,8 +32,12 @@ const TodoForm = ({addTodo}) => {
 const Todo = ({todo, remove}) => {
     // Each Todo
     return (
-        <li class="nav-link" onClick={() => { remove(todo.id)}}>
-            {todo.time + ' -  ' + todo.text}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {todo.time}<b>{todo.text}</b>
+            <button type="button" class="btn btn-danger" onClick={() => {
+                remove(todo.id)
+            }}>Usuń
+            </button>
         </li>
     )
 };
@@ -61,12 +71,12 @@ class App extends Component {
     }
 
     addTodo(val) {
-        let date = new Date();
-        let time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' +
-            date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        var time = moment()
+            .format('DD.MM.YYYY - HH:mm:ss')
+            .toString();
 
         const todo = {text: val, id: this.id, time: time};
-        this.state.data.push(todo);
+        this.state.data.unshift(todo);
         this.setState({data: this.state.data});
         this.id++;
     }
