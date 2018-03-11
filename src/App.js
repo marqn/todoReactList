@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import './App.css';
 
+console.clear();
+
 const TodoForm = ({addTodo}) => {
     let input;
 
+    // Return JSX
     return (
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="" aria-label="" ref={node => {
@@ -23,8 +26,8 @@ const TodoForm = ({addTodo}) => {
 const Todo = ({todo, remove}) => {
     // Each Todo
     return (
-        <li class="nav-link">
-            {todo.text}
+        <li class="nav-link" onClick={() => { remove(todo.id)}}>
+            {todo.time + ' -  ' + todo.text}
         </li>
     )
 };
@@ -36,19 +39,19 @@ const TodoList = ({todos, remove}) => {
     return (<ul>{todoNode}</ul>);
 };
 
-const Title = () => {
+const Title = ({todoCount}) => {
     return (
         <div>
             <div>
-                <h1>Task list</h1>
+                <h1>Task list: ({todoCount})</h1>
             </div>
         </div>
     );
 };
 
-window.id = 0;
-
 class App extends Component {
+    id = 0;
+
     constructor(props) {
         super(props);
 
@@ -58,12 +61,18 @@ class App extends Component {
     }
 
     addTodo(val) {
-        const todo = {text: val, id: window.id};
+        let date = new Date();
+        let time = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' +
+            date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+
+        const todo = {text: val, id: this.id, time: time};
         this.state.data.push(todo);
         this.setState({data: this.state.data});
+        this.id++;
     }
 
     handleRemove(id) {
+        console.log('click remove  id:' + id);
         // Filter all todos except the one to be removed
         const remainder = this.state.data.filter((todo) => {
             if (todo.id !== id) return todo;
@@ -76,17 +85,11 @@ class App extends Component {
         return (
             <div className="App">
                 <div class="container">
-                    <Title/>
+                    <Title todoCount={this.state.data.length}/>
                     <TodoForm addTodo={this.addTodo.bind(this)}/>
                     <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)}/>
 
-                    {/*<div id="container" class="col-md-8 col-md-offset-2">
-                        <button class="btn btn-outline-danger">click me!</button>
-                        <button class="btn btn-outline-danger">click me two!</button>
-                    </div>*/}
                 </div>
-
-
             </div>
         );
     }
