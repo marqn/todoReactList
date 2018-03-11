@@ -11,7 +11,7 @@ const TodoForm = ({addTodo}) => {
     return (
         <div class="input-group mb-3">
             <input type="text" class="form-control" onKeyPress={(e) => {
-                if (e.key == 'Enter' && input.value != '') {
+                if (e.key === 'Enter') {
                     addTodo(input.value);
                     input.value = '';
                 }
@@ -71,14 +71,16 @@ class App extends Component {
     }
 
     addTodo(val) {
-        var time = moment()
+        let time = moment()
             .format('DD.MM.YYYY - HH:mm:ss')
             .toString();
 
-        const todo = {text: val, id: this.id, time: time};
-        this.state.data.unshift(todo);
-        this.setState({data: this.state.data});
-        this.id++;
+        if (val !== '') {
+            const todo = {text: val, id: this.id, time: time};
+            this.state.data.unshift(todo);
+            this.setState({data: this.state.data});
+            this.id++;
+        }
     }
 
     handleRemove(id) {
