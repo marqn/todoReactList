@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import moment from 'moment';
+import DoneButton from './DoneButton';
 
 console.clear();
 
@@ -34,10 +35,17 @@ const Todo = ({todo, remove}) => {
     return (
         <li class="list-group-item d-flex justify-content-between align-items-center">
             {todo.time}<b>{todo.text}</b>
-            <button type="button" class="btn btn-danger" onClick={() => {
-                remove(todo.id)
-            }}>Usuń
-            </button>
+            <div>
+                <DoneButton/>
+                <button type="button" class="btn btn-warning" onClick={() => {
+                    remove(todo.id)
+                }}>Edytuj
+                </button>
+                <button type="button" class="btn btn-danger" onClick={() => {
+                    remove(todo.id)
+                }}>Usuń
+                </button>
+            </div>
         </li>
     )
 };
