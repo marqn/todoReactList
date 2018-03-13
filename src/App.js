@@ -30,7 +30,7 @@ const TodoForm = ({addTodo}) => {
     )
 };
 
-const Todo = ({todo, remove}) => {
+const Todo = ({todo, remove, edit}) => {
     // Each Todo
     return (
         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -38,7 +38,7 @@ const Todo = ({todo, remove}) => {
             <div>
                 <DoneButton/>
                 <button type="button" class="btn btn-warning" onClick={() => {
-                    remove(todo.id)
+                    edit(todo.id)
                 }}>Edytuj
                 </button>
                 <button type="button" class="btn btn-danger" onClick={() => {
@@ -50,9 +50,9 @@ const Todo = ({todo, remove}) => {
     )
 };
 
-const TodoList = ({todos, remove}) => {
+const TodoList = ({todos, remove, edit}) => {
     const todoNode = todos.map((todo) => {
-        return (<Todo todo={todo} key={todo.id} remove={remove}/>)
+        return (<Todo todo={todo} key={todo.id} remove={remove} edit={edit}/>)
     });
     return (<ul>{todoNode}</ul>);
 };
@@ -101,13 +101,23 @@ class App extends Component {
         this.setState({data: remainder});
     }
 
+    edit(id) {
+        console.log('edit:' + id);
+        const remainder = this.state.data.filter((todo) => {
+            if (todo.id == id) {
+                console.log(todo);
+
+            }
+        });
+    }
+
     render() {
         return (
             <div className="App">
                 <div class="container">
                     <Title todoCount={this.state.data.length}/>
                     <TodoForm addTodo={this.addTodo.bind(this)}/>
-                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)}/>
+                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)} edit={this.edit.bind(this)}/>
 
                 </div>
             </div>
