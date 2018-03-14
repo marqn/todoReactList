@@ -70,6 +70,9 @@ const Title = ({todoCount}) => {
 class App extends Component {
     id = 0;
     _inputText;
+    onEditedText = (editedText) => {
+        this.state({editedText});
+    };
 
     constructor(props) {
         super(props);
@@ -80,11 +83,8 @@ class App extends Component {
         }
     }
 
-    onEditedText = (editedText) => {
-        this.state({editedText});
-    };
-
     addTodo(val) {
+        console.log(this.impucik);
         let time = moment()
             .format('DD.MM.YYYY - HH:mm:ss')
             .toString();
@@ -108,24 +108,27 @@ class App extends Component {
     }
 
     edit(id) {
-        console.log('edit:' + id);
+        // console.log('edit:' + id);
         const remainder = this.state.data.filter((todo) => {
             if (todo.id == id) {
                 this._inputText = todo.text;
-                console.log(todo);
-                console.log('this._inputText:' + this._inputText );
+                // console.log(todo);
+                // console.log('this._inputText:' + this._inputText);
+                this.setState({editedText: todo.text});
             }
         });
+        console.log(this);
     }
 
     render() {
         return (
             <div className="App">
                 <div className="container">
-                    <Test placeholder="mój tekst" inputText={this._inputText}/>
+                    <Test placeholder="mój tekst" />
                     <Title todoCount={this.state.data.length}/>
-                    <TodoForm id="tdf" addTodo={this.addTodo.bind(this)}/>
-                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)} edit={this.edit.bind(this)}/>
+                    <TodoForm red={(c) => this.impucik = c} addTodo={this.addTodo.bind(this)}/>
+                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)}
+                              edit={this.edit.bind(this)}/>
 
                 </div>
             </div>
@@ -133,11 +136,28 @@ class App extends Component {
     }
 }
 
-class Test extends Component {
+class Test extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {count: 0, text: null};
+    }
+
+    increment() {
+        this.state.count = this.state.count + 1;
+        this.setState({count: this.state.count});
+        this.myInput.value = this.state.count;
+    }
+
     render() {
-        const { placeholder, inputText } = this.props;
-        return( 
-            <input type="text" placeholder={placeholder} value={inputText} />
+        const {placeholder} = this.props;
+        return (
+            <div>
+                <input type="text" placeholder={placeholder} ref={(c) => this.myInput = c}/>
+
+                <button onClick={this.increment.bind(this)} type="button" className="btn btn-primary">
+                    Notifications <span className="badge badge-light">{this.state.count}</span>
+                </button>
+            </div>
         )
     }
 }
