@@ -7,9 +7,9 @@ export default class DoneButton extends React.Component {
     }
 
     changeState() {
-        if (this.state.status == 'btn btn-secondary')
+        if (this.state.status === 'btn btn-secondary')
             this.setState({status: 'btn btn-success', text:'Zrobione'});
-        else if (this.state.status == 'btn btn-success')
+        else if (this.state.status === 'btn btn-success')
             this.setState({status: 'btn btn-secondary', text:'Wykonaj'});
 
         console.log(this.state);
@@ -17,7 +17,7 @@ export default class DoneButton extends React.Component {
 
     render() {
         return (
-            <button class={this.state.status} onClick={this.changeState.bind(this)}>{this.state.text}</button>
+            <button className={this.state.status} onClick={this.changeState.bind(this)}>{this.state.text}</button>
         )
     }
 }

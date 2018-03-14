@@ -10,8 +10,8 @@ const TodoForm = ({addTodo}) => {
 
     // Return JSX
     return (
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" onKeyPress={(e) => {
+        <div className="input-group mb-3">
+            <input type="text" className="form-control" onKeyPress={(e) => {
                 if (e.key === 'Enter') {
                     addTodo(input.value);
                     input.value = '';
@@ -19,8 +19,8 @@ const TodoForm = ({addTodo}) => {
             }} placeholder="add task..." ref={node => {
                 input = node;
             }}/>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" onClick={() => {
+            <div className="input-group-append">
+                <button className="btn btn-outline-secondary" onClick={() => {
                     addTodo(input.value);
                     input.value = '';
                 }}>+ Add task
@@ -33,15 +33,15 @@ const TodoForm = ({addTodo}) => {
 const Todo = ({todo, remove, edit}) => {
     // Each Todo
     return (
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <li className="list-group-item d-flex justify-content-between align-items-center">
             {todo.time}<b>{todo.text}</b>
             <div>
                 <DoneButton/>
-                <button type="button" class="btn btn-warning" onClick={() => {
+                <button type="button" className="btn btn-warning" onClick={() => {
                     edit(todo.id)
                 }}>Edytuj
                 </button>
-                <button type="button" class="btn btn-danger" onClick={() => {
+                <button type="button" className="btn btn-danger" onClick={() => {
                     remove(todo.id)
                 }}>Usuń
                 </button>
@@ -69,14 +69,20 @@ const Title = ({todoCount}) => {
 
 class App extends Component {
     id = 0;
+    _inputText;
 
     constructor(props) {
         super(props);
 
         this.state = {
-            data: []
+            data: [],
+            editedText: ''
         }
     }
+
+    onEditedText = (editedText) => {
+        this.state({editedText});
+    };
 
     addTodo(val) {
         let time = moment()
@@ -105,8 +111,9 @@ class App extends Component {
         console.log('edit:' + id);
         const remainder = this.state.data.filter((todo) => {
             if (todo.id == id) {
+                this._inputText = todo.text;
                 console.log(todo);
-
+                console.log('this._inputText:' + this._inputText );
             }
         });
     }
@@ -114,14 +121,24 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <div class="container">
+                <div className="container">
+                    <Test placeholder="mój tekst" inputText={this._inputText}/>
                     <Title todoCount={this.state.data.length}/>
-                    <TodoForm addTodo={this.addTodo.bind(this)}/>
+                    <TodoForm id="tdf" addTodo={this.addTodo.bind(this)}/>
                     <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)} edit={this.edit.bind(this)}/>
 
                 </div>
             </div>
         );
+    }
+}
+
+class Test extends Component {
+    render() {
+        const { placeholder, inputText } = this.props;
+        return( 
+            <input type="text" placeholder={placeholder} value={inputText} />
+        )
     }
 }
 
