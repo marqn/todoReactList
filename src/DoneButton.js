@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-export default class DoneButton extends React.Component {
+export default class DoneButton extends Component {
     constructor(props) {
         super(props);
         this.state = {status: 'btn btn-secondary', text: 'Wykonaj'};
@@ -8,11 +8,9 @@ export default class DoneButton extends React.Component {
 
     changeState() {
         if (this.state.status === 'btn btn-secondary')
-            this.setState({status: 'btn btn-success', text:'Zrobione'});
+            this.setState({status: 'btn btn-success', text: 'Zrobione'});
         else if (this.state.status === 'btn btn-success')
-            this.setState({status: 'btn btn-secondary', text:'Wykonaj'});
-
-        console.log(this.state);
+            this.setState({status: 'btn btn-secondary', text: 'Wykonaj'});
     }
 
     render() {

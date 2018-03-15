@@ -6,23 +6,20 @@ import DoneButton from './DoneButton';
 console.clear();
 
 const TodoForm = ({addTodo}) => {
-    let input;
-
     // Return JSX
     return (
         <div className="input-group mb-3">
-            <input type="text" className="form-control" onKeyPress={(e) => {
+            <input type="text"  ref={(c) => this.impucik = c} className="form-control" onKeyPress={(e) => {
                 if (e.key === 'Enter') {
-                    addTodo(input.value);
-                    input.value = '';
+                    addTodo(this.impucik.value, this.impucik);
+                    this.impucik.value = '';
                 }
-            }} placeholder="add task..." ref={node => {
-                input = node;
-            }}/>
+            }} placeholder="add task..."/>
+
             <div className="input-group-append">
                 <button className="btn btn-outline-secondary" onClick={() => {
-                    addTodo(input.value);
-                    input.value = '';
+                    addTodo(this.impucik.value, this.impucik);
+                    this.impucik.value = '';
                 }}>+ Add task
                 </button>
             </div>
@@ -69,22 +66,18 @@ const Title = ({todoCount}) => {
 
 class App extends Component {
     id = 0;
-    _inputText;
-    onEditedText = (editedText) => {
-        this.state({editedText});
-    };
 
     constructor(props) {
         super(props);
 
         this.state = {
             data: [],
-            editedText: ''
+            editedInput: ''
         }
     }
 
-    addTodo(val) {
-        console.log(this.impucik);
+    addTodo = (val, impucik) => {
+        console.log(impucik);
         let time = moment()
             .format('DD.MM.YYYY - HH:mm:ss')
             .toString();
@@ -92,10 +85,10 @@ class App extends Component {
         if (val !== '') {
             const todo = {text: val, id: this.id, time: time};
             this.state.data.unshift(todo);
-            this.setState({data: this.state.data});
+            this.setState({data: this.state.data, editedInput: impucik});
             this.id++;
         }
-    }
+    };
 
     handleRemove(id) {
         console.log('click remove  id:' + id);
@@ -107,36 +100,31 @@ class App extends Component {
         this.setState({data: remainder});
     }
 
-    edit(id) {
-        // console.log('edit:' + id);
+    edit = (id) => {
         const remainder = this.state.data.filter((todo) => {
-            if (todo.id == id) {
-                this._inputText = todo.text;
-                // console.log(todo);
-                // console.log('this._inputText:' + this._inputText);
+            if (todo.id === id) {
+                this.state.editedInput.value = todo.text;
                 this.setState({editedText: todo.text});
             }
         });
-        console.log(this);
-    }
+        console.log(this.state.editedInput);
+    };
 
     render() {
         return (
             <div className="App">
                 <div className="container">
-                    <Test placeholder="mój tekst" />
+                    <Test placeholder="mój tekst"/>
                     <Title todoCount={this.state.data.length}/>
-                    <TodoForm red={(c) => this.impucik = c} addTodo={this.addTodo.bind(this)}/>
-                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)}
-                              edit={this.edit.bind(this)}/>
-
+                    <TodoForm addTodo={this.addTodo}/>
+                    <TodoList todos={this.state.data} remove={this.handleRemove.bind(this)} edit={this.edit}/>
                 </div>
             </div>
         );
     }
 }
 
-class Test extends React.Component {
+class Test extends Component {
     constructor(props) {
         super(props);
         this.state = {count: 0, text: null};
@@ -146,7 +134,7 @@ class Test extends React.Component {
         this.state.count = this.state.count + 1;
         this.setState({count: this.state.count});
         this.myInput.value = this.state.count;
-    }
+    };
 
     render() {
         const {placeholder} = this.props;
