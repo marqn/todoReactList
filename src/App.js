@@ -142,7 +142,7 @@ class Test extends React.Component {
         this.state = {count: 0, text: null};
     }
 
-    increment() {
+    increment = (e) => {
         this.state.count = this.state.count + 1;
         this.setState({count: this.state.count});
         this.myInput.value = this.state.count;
@@ -154,7 +154,7 @@ class Test extends React.Component {
             <div>
                 <input type="text" placeholder={placeholder} ref={(c) => this.myInput = c}/>
 
-                <button onClick={this.increment.bind(this)} type="button" className="btn btn-primary">
+                <button onClick={this.increment} type="button" className="btn btn-primary">
                     Notifications <span className="badge badge-light">{this.state.count}</span>
                 </button>
             </div>
