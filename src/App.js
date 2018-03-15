@@ -150,4 +150,33 @@ class Test extends Component {
     }
 }
 
+class Todoform extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {mode:'add'};
+    }
+
+    render() {
+        const {addTodo} = this.props;
+        return(
+            <div className="input-group mb-3">
+            <input type="text"  ref={(c) => this.impucik = c} className="form-control" onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                    addTodo(this.impucik.value, this.impucik);
+                    this.impucik.value = '';
+                }
+            }} placeholder="add task..."/>
+
+            <div className="input-group-append">
+                <button className="btn btn-outline-secondary" onClick={() => {
+                    addTodo(this.impucik.value, this.impucik);
+                    this.impucik.value = '';
+                }}>+ Add task
+                </button>
+            </div>
+        </div>
+        )
+    }
+}
+
 export default App;
